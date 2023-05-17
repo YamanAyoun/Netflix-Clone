@@ -1,30 +1,26 @@
 import axios from "axios";
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
+import ModalMovie from "./ModalMovie";
 
-function Movie(){
-    const [TrendingData, setTrendingData] = useState([])
+function Movie(props){
 
-    const getTrending = () =>{
-        const serverURL = `http://localhost:3000/trending`;
+    const [showFlag, setShowFlag] = useState(false);
+    const [clickedMovie, setClickedMovie] = useState({});
 
-        fetch(serverURL)
-            .then(response => {
-                response.json().then(data => {
-                    console.log(data)
-                    setTrendingData(data)
-
-                })
-            })
+    const handleShow = (item) => {
+        setShowFlag(true)
+      
+        setClickedMovie(item)
     }
 
-    useEffect(()=>{
-        getTrending()
-    },[])
+    const handleClose = () => {
+        setShowFlag(false)
+    }
 
-    const addFav = (item) =>{
-        const serverURL = `http://localhost:3000/addMovie`;
+    const addToFav = (item) =>{
+        const serverURL = `http://localhost:3005/addToFav`;
         axios.post(serverURL, item)
         .then(response=>{
             console.log(response.data)
@@ -38,23 +34,23 @@ function Movie(){
     
     return(
         <>
-        <button onClick={getTrending}>send req</button>
+        {/* <button onClick={props.getTrending}>send req</button> */}
         <h1>home</h1>
 
-        {TrendingData.map(item => {
-                return (
-                    <Card style={{ width: '18rem' }} key={item.ID}>
+        
+        
+                    <Card style={{ width: '18rem' }} key={props.item.ID}>
                         <Card.Body>
-                            <Card.Title>{item.title}</Card.Title>
+                            <Card.Title>{props.item.title}</Card.Title>
                             <Card.Text>
-                               <p>{item.release_date}</p>
+                               <p>{props.item.release_date}</p>
                             </Card.Text>
-                            <Button variant="primary" onClick={()=>{addFav(item)}}>Add to Favorite</Button>
+                            <Button variant="primary" onClick={()=>{addToFav(props.item)}}>Add to Favorite</Button>
                         </Card.Body>
                     </Card>
-                )
-            })}
-  
+                
+                
+            <ModalMovie showFlag={showFlag} handleClose={handleClose} clickedMovie={clickedMovie}/>
         </>
     )
 }

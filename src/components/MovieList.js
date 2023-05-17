@@ -1,10 +1,18 @@
-import Movie from "./Movie";
+import Movie from "./Movie.js";
 
 
-function MovieList(){
+function MovieList(props){
     return(
         <>
-        <Movie/>
+        {
+        props.TrendingData.map(item=>
+          {
+            return  <div>
+                  
+            <Movie item={item}/>
+              </div>
+      })
+      }
         </>
     )
 }
