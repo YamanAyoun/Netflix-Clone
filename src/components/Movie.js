@@ -3,16 +3,21 @@ import { useState } from 'react'
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import ModalMovie from "./ModalMovie";
+import FavList from "./FavList";
 
 function Movie(props){
 
     const [showFlag, setShowFlag] = useState(false);
     const [clickedMovie, setClickedMovie] = useState({});
+    const [updateFlag, setUpdateFlag] = useState(false);
 
     const handleShow = (item) => {
         setShowFlag(true)
       
         setClickedMovie(item)
+    }
+    const closeUpdateModal = () => {
+        setUpdateFlag(false)
     }
 
     const handleClose = () => {
@@ -20,7 +25,7 @@ function Movie(props){
     }
 
     const addToFav = (item) =>{
-        const serverURL = `http://localhost:3005/addToFav`;
+        const serverURL = `${process.env.REACT_APP_serverURL}/addToFav`;
         axios.post(serverURL, item)
         .then(response=>{
             console.log(response.data)
@@ -51,6 +56,7 @@ function Movie(props){
                 
                 
             <ModalMovie showFlag={showFlag} handleClose={handleClose} clickedMovie={clickedMovie}/>
+            {/* <FavList updateFlag={updateFlag} closeUpdateModal={closeUpdateModal} clickedMovie={clickedMovie} takeNewDataFromUpdatedModal={takeNewDataFromUpdatedModal}/> */}
         </>
     )
 }
